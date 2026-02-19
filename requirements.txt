@@ -1,0 +1,8 @@
+gradio
+torch
+transformers
+peft
+accelerate
+bitsandbytes; sys_platform != 'darwin'
+huggingface_hub<0.25.0
+

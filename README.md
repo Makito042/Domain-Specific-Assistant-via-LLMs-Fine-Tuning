@@ -63,13 +63,29 @@ We aggregate "helps" and "helped_by" relationships to create comprehensive answe
     - Batch Size: 2
     - Gradient Accumulation: 4
     - Learning Rate: 2e-4
-    - Max Steps: 60 (Adjustable)
+    - **Scheduling**: Linear
+    - **Epochs**: 15 (Aggressive training for factual recall)
+- **Strategy**:
+    - **Strict Instruction Tuning**: The model is trained with instructions like *"List strictly the plants..."* to enforce concise, list-based output without hallucination.
+    - **EOS Tokens**: Explicit `<eos>` tokens are used to teach the model exactly when to stop generating.
+    - **Bi-directional Augmentation**: The dataset is processed to learn both "A helps B" and "B is helped by A" relationships.
 
 ## 📈 Performance & Evaluation
 
-The model is evaluated qualitatively by asking domain-specific questions (e.g., "What grows well with Carrots?").
-- **Baseline**: The base model often gives generic gardening advice.
-- **Fine-Tuned**: The fine-tuned model provides specific lists of companion plants derived directly from the dataset.
+The final model is evaluated using both qualitative checks and quantitative metrics:
+
+### Quantitative Metrics (on `train_final.ipynb`):
+- **BLEU**: Measures n-gram precision (High scores indicate exact matching of plant lists).
+- **ROUGE-L**: Measures longest common subsequence (Important for list recall).
+- **Perplexity**: Measures how well the model predicts the next token.
+
+### Qualitative Analysis:
+- **Baseline**: The base model often gives generic gardening advice or hallucinates plants not in the database.
+- **Fine-Tuned**: The fine-tuned model provides specific, accurate lists of companion plants derived directly from the dataset.
+
+#### Example Conversation:
+**User**: "What are the best companion plants for Tomatoes?"
+**Assistant**: "Best companions for Tomatoes: Basil, Chives, Marigolds, Parsley." (Exact match to ground truth)
 
 ## 🖥️ User Interface
 
